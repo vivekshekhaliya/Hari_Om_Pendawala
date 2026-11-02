@@ -1,0 +1,25 @@
+{
+  "name": "hari-om-pendawala-sweet-and-namkeen",
+  "version": "1.0.0",
+  "description": "Full-stack online sweet shop & admin portal for Hari Om Pendawala Sweet & Namkeen – Amreliwala",
+  "scripts": {
+    "setup:db": "node backend/database/seed.js",
+    "backend": "cd backend && node server.js",
+    "frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && node server.js",
+    "dev:frontend": "cd frontend && npm run dev"
+  },
+  "keywords": [
+    "mithai",
+    "sweets",
+    "namkeen",
+    "react",
+    "nodejs",
+    "express",
+    "mysql",
+    "amreli",
+    "thabdi-penda"
+  ],
+  "author": "Hari Om Pendawala",
+  "license": "ISC"
+}
