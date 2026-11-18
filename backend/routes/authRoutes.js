@@ -42,7 +42,10 @@ router.post('/admin/login', async (req, res) => {
     });
   } catch (err) {
     console.error('Admin login error:', err);
-    res.status(500).json({ success: false, message: 'Server error during login' });
+    const message = err.code || err.sqlMessage
+      ? `Database error (${err.code || 'MySQL'}): ${err.message}`
+      : (err.message || 'Server error during login');
+    res.status(500).json({ success: false, message });
   }
 });
 

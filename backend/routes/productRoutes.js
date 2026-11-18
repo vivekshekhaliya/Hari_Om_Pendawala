@@ -77,7 +77,7 @@ router.get('/', async (req, res) => {
     res.json({ success: true, count: products.length, data: products });
   } catch (err) {
     console.error('Get products error:', err);
-    res.status(500).json({ success: false, message: 'Failed to fetch products' });
+    res.status(500).json({ success: false, message: `Failed to fetch products: ${err.message}` });
   }
 });
 

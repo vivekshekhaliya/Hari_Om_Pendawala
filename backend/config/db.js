@@ -3,6 +3,9 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
+const isRemoteHost = process.env.DB_HOST && process.env.DB_HOST !== 'localhost' && process.env.DB_HOST !== '127.0.0.1';
+const useSSL = process.env.DB_SSL === 'true' || isRemoteHost;
+
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
@@ -10,10 +13,11 @@ const pool = mysql.createPool({
   database: process.env.DB_NAME || 'hari_om_pendawala',
   port: parseInt(process.env.DB_PORT || '3306'),
   waitForConnections: true,
-  connectionLimit: 15,
+  connectionLimit: 10,
   queueLimit: 0,
   multipleStatements: true,
-  decimalNumbers: true
+  decimalNumbers: true,
+  ...(useSSL ? { ssl: { rejectUnauthorized: false } } : {})
 });
 
 async function testConnection() {
@@ -21,10 +25,10 @@ async function testConnection() {
     const connection = await pool.getConnection();
     console.log('✅ Connected to MySQL database:', process.env.DB_NAME || 'hari_om_pendawala');
     connection.release();
-    return true;
+    return { success: true };
   } catch (error) {
     console.error('❌ MySQL Connection Failed:', error.message);
-    return false;
+    return { success: false, error: error.message };
   }
 }
 

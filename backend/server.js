@@ -45,10 +45,34 @@ app.use('/api/shop-settings', shopRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/reports', reportRoutes);
 
+// Root Route (Welcome / Status)
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Hari Om Pendawala Backend REST API is running',
+    version: '1.0.0',
+    endpoints: {
+      health: '/api/health',
+      categories: '/api/categories',
+      products: '/api/products',
+      shopSettings: '/api/shop-settings',
+      adminLogin: '/api/auth/admin/login'
+    }
+  });
+});
+
 // Health Check
-app.get('/api/health', (req, res) => {
+app.get('/api/health', async (req, res) => {
+  const dbTest = await testConnection();
   res.json({
     status: 'online',
+    database: {
+      connected: dbTest.success,
+      host: process.env.DB_HOST || 'localhost',
+      port: process.env.DB_PORT || 3306,
+      name: process.env.DB_NAME || 'hari_om_pendawala',
+      ...(dbTest.error ? { error: dbTest.error } : {})
+    },
     store: 'Hari Om Pendawala Sweet & Namkeen – Amreliwala',
     timestamp: new Date().toISOString()
   });
@@ -77,4 +101,8 @@ async function startServer() {
   });
 }
 
-startServer();
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  startServer();
+}
+
+module.exports = app;

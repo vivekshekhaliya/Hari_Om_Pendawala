@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
     res.json({ success: true, data: categories });
   } catch (err) {
     console.error('Get categories error:', err);
-    res.status(500).json({ success: false, message: 'Failed to fetch categories' });
+    res.status(500).json({ success: false, message: `Failed to fetch categories: ${err.message}` });
   }
 });
 

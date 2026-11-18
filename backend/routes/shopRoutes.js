@@ -6,30 +6,31 @@ const upload = require('../middleware/upload');
 
 // 1. Get Shop Public Settings & Branding
 router.get('/', async (req, res) => {
+  const defaultSettings = {
+    shop_name: 'Hari Om Pendawala Sweet & Namkeen – Amreliwala',
+    tagline: 'Authentic Taste of Saurashtra & Pure Amreli Sweets',
+    logo_url: '/assets/logo.jpeg',
+    phone: '+91 97122 47979',
+    alternate_phone: '',
+    address: 'Shop Number 8, Floor 2, Sun South Park, near SOBO Center Road, South Bopal, Bopal, Ahmedabad, Gujarat 380057',
+    city: 'Ahmedabad',
+    state: 'Gujarat',
+    pincode: '380057',
+    google_maps_url: 'https://www.google.com/maps/place/Hari+om+pendawala+sweet+%26+namkeen+-+Amreliwala/@23.0161268,72.4711575,17z',
+    opening_hours: 'Monday - Sunday: 8:00 AM – 10:30 PM',
+    gst_number: '24AAACH9876M1Z8',
+    gst_percentage: 5.00,
+    announcement_text: 'Festive Special: Pure Ghee Thabdi Penda & Special Gathiya available daily! Free delivery on orders above ₹500!',
+    is_store_open: 1
+  };
+
   try {
     const [rows] = await pool.query('SELECT * FROM shop_settings WHERE id = 1');
-    const settings = rows[0] || {
-      shop_name: 'Hari Om Pendawala Sweet & Namkeen – Amreliwala',
-      tagline: 'Authentic Taste of Saurashtra & Pure Amreli Sweets',
-      logo_url: '/assets/logo.jpeg',
-      phone: '+91 97122 47979',
-      alternate_phone: '',
-      address: 'Shop Number 8, Floor 2, Sun South Park, near SOBO Center Road, South Bopal, Bopal, Ahmedabad, Gujarat 380057',
-      city: 'Ahmedabad',
-      state: 'Gujarat',
-      pincode: '380057',
-      google_maps_url: 'https://www.google.com/maps/place/Hari+om+pendawala+sweet+%26+namkeen+-+Amreliwala/@23.0161268,72.4711575,17z',
-      opening_hours: 'Monday - Sunday: 8:00 AM – 10:30 PM',
-      gst_number: '24AAACH9876M1Z8',
-      gst_percentage: 5.00,
-      announcement_text: 'Festive Special: Pure Ghee Thabdi Penda & Special Gathiya available daily! Free delivery on orders above ₹500!',
-      is_store_open: 1
-    };
-
+    const settings = rows[0] || defaultSettings;
     res.json({ success: true, data: settings });
   } catch (err) {
-    console.error('Get shop settings error:', err);
-    res.status(500).json({ success: false, message: 'Failed to fetch shop settings' });
+    console.error('Get shop settings error, returning fallback:', err.message);
+    res.json({ success: true, data: defaultSettings, warning: `Database unavailable: ${err.message}` });
   }
 });
 
