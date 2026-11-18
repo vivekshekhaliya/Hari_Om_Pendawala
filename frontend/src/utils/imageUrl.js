@@ -4,7 +4,7 @@
  * while bundled static assets are served from /assets/.
  */
 
-const BACKEND_URL = (import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL?.replace(/\/api\/?$/, '') || 'http://localhost:5001').replace(/\/+$/, '');
+const BACKEND_URL = (import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL?.replace(/\/api\/?$/, '') || 'https://backend-five-beta-26.vercel.app').replace(/\/+$/, '');
 
 export function getImageUrl(path, fallback = '/assets/thabdi-penda.jpg') {
   if (!path) return fallback;
